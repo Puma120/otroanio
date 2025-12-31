@@ -1,0 +1,998 @@
+/* ===== ESCENA PRINCIPAL ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.scene-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    #0a0a1a 0%,
+    #1a1a3e 30%,
+    #2d1b4e 50%,
+    #1a1a3e 70%,
+    #0a0a1a 100%
+  );
+  image-rendering: pixelated;
+}
+
+/* ===== CIELO NOCTURNO ===== */
+.night-sky {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  z-index: 1;
+}
+
+/* Estrellas */
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 3px white, 0 0 6px white;
+}
+
+/* Luna */
+.moon {
+  position: absolute;
+  top: 8%;
+  right: 10%;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(255, 255, 200, 0.6);
+}
+
+/* ===== TEXTO PRINCIPAL ===== */
+.main-text {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 10;
+}
+
+.title {
+  font-family: 'Courier New', monospace;
+  font-size: clamp(2rem, 8vw, 5rem);
+  color: white;
+  margin: 0;
+  text-shadow: 
+    0 0 10px #ff6b9d,
+    0 0 20px #ff6b9d,
+    0 0 30px #ff6b9d,
+    0 0 40px #ff6b9d;
+  letter-spacing: 4px;
+}
+
+.pixel-text {
+  /* Efecto pixelado sutil */
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+}
+
+.subtitle {
+  font-family: 'Courier New', monospace;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  color: #ffd93d;
+  margin-top: 10px;
+  text-shadow: 0 0 15px #ffd93d;
+}
+
+/* ===== FUEGOS ARTIFICIALES ===== */
+.fireworks-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.firework {
+  position: absolute;
+}
+
+.firework-trail {
+  width: 3px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.firework-particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+}
+
+.firework-center {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ===== MONTAÑAS ===== */
+.mountains-far {
+  position: absolute;
+  bottom: 25%;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  z-index: 2;
+}
+
+.mountains-far svg {
+  width: 100%;
+  height: 100%;
+}
+
+.mountains-near {
+  position: absolute;
+  bottom: 20%;
+  left: 0;
+  width: 100%;
+  height: 25%;
+  z-index: 3;
+}
+
+.mountains-near svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== MIRADOR ===== */
+.viewpoint {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 600px;
+  height: 25%;
+  z-index: 20;
+}
+
+/* Barandilla */
+.railing {
+  position: absolute;
+  bottom: 60%;
+  left: 10%;
+  width: 80%;
+  height: 40px;
+  z-index: 21;
+}
+
+.rail-horizontal {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to bottom, #8b7355, #5d4e37);
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.rail-post {
+  position: absolute;
+  bottom: 0;
+  width: 10px;
+  height: 35px;
+  background: linear-gradient(to right, #8b7355, #6d5a42, #8b7355);
+  border-radius: 2px 2px 0 0;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.3);
+}
+
+.rail-post.left {
+  left: 0;
+}
+
+.rail-post.right {
+  right: 0;
+}
+
+/* Piso del mirador */
+.floor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(
+    to bottom,
+    #4a3728 0%,
+    #3d2d20 50%,
+    #2d1f15 100%
+  );
+  border-radius: 5px 5px 0 0;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+}
+
+.floor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 30px,
+      rgba(0,0,0,0.1) 30px,
+      rgba(0,0,0,0.1) 32px
+    );
+}
+
+/* ===== PAREJA PIXEL ART ===== */
+.couple-container {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  z-index: 25;
+}
+
+.person {
+  position: relative;
+}
+
+.pixel-person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  image-rendering: pixelated;
+}
+
+/* ===== CABEZA BASE ===== */
+.head {
+  width: 28px;
+  height: 28px;
+  background: #f5d0b5;
+  border-radius: 6px;
+  position: relative;
+  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.1);
+  z-index: 2;
+}
+
+.head-1, .head-2 {
+  width: 28px;
+  height: 28px;
+}
+
+/* Cabeza vista trasera - solo se ve un poco de piel */
+.head-back {
+  width: 28px;
+  height: 28px;
+  background: #f5d0b5;
+  border-radius: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== CUELLO ===== */
+.neck {
+  width: 14px;
+  height: 6px;
+  background: #f5d0b5;
+  margin-top: -2px;
+  z-index: 1;
+}
+
+/* ===== LENTES ===== */
+.glasses {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.glasses::before,
+.glasses::after {
+  content: '';
+  width: 10px;
+  height: 8px;
+  border-radius: 2px;
+  border: 2px solid;
+}
+
+.glasses-dark::before,
+.glasses-dark::after {
+  border-color: #2d2d2d;
+  background: rgba(45, 45, 45, 0.3);
+}
+
+.glasses-light::before,
+.glasses-light::after {
+  border-color: #c9b896;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Puente de los lentes */
+.glasses::after {
+  margin-left: 2px;
+}
+
+/* ===== COLLARES ===== */
+.necklace {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.necklace-chain {
+  width: 20px;
+  height: 4px;
+  border-bottom: 2px solid #c0c0c0;
+  border-radius: 0 0 50% 50%;
+}
+
+.necklace-chain::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: #c0c0c0;
+  border-radius: 50%;
+}
+
+.necklace-pendant {
+  width: 16px;
+  height: 4px;
+  border-bottom: 2px solid #d4af37;
+  border-radius: 0 0 50% 50%;
+}
+
+.necklace-pendant::after {
+  content: '❀';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  color: #d4af37;
+}
+
+/* ===== CABELLO ===== */
+.hair {
+  position: relative;
+  margin-bottom: -6px;
+  z-index: 3;
+}
+
+/* Persona 1: Cabello castaño oscuro, largo hasta los hombros */
+.hair-1 {
+  width: 34px;
+  height: 18px;
+  background: #5c3a21;
+  border-radius: 8px 8px 0 0;
+}
+
+.hair-1::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: -3px;
+  width: 40px;
+  height: 45px;
+  background: linear-gradient(180deg, #5c3a21 0%, #4a2f1a 100%);
+  border-radius: 5px 5px 12px 12px;
+  z-index: -1;
+}
+
+/* Persona 1: Cabello vista trasera - cubre más la cabeza */
+.hair-1-back {
+  width: 36px;
+  height: 20px;
+  background: linear-gradient(180deg, #5c3a21 0%, #4a2f1a 50%);
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  margin-bottom: -8px;
+  z-index: 3;
+}
+
+.hair-1-back::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: -4px;
+  width: 44px;
+  height: 50px;
+  background: linear-gradient(180deg, #5c3a21 0%, #4a2f1a 100%);
+  border-radius: 8px 8px 15px 15px;
+  z-index: 2;
+}
+
+/* Persona 2: Cabello castaño oscuro con flequillo, corte bob */
+.hair-2 {
+  width: 34px;
+  height: 14px;
+  background: #4a3728;
+  border-radius: 8px 8px 0 0;
+}
+
+/* Flequillo */
+.hair-2::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 2px;
+  width: 30px;
+  height: 8px;
+  background: #4a3728;
+  border-radius: 0 0 3px 3px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 80% 60%, 60% 100%, 40% 60%, 20% 100%, 0 60%);
+}
+
+/* Corte bob - cabello más corto */
+.hair-2::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: -2px;
+  width: 38px;
+  height: 24px;
+  background: linear-gradient(180deg, #4a3728 0%, #3d2d20 100%);
+  border-radius: 5px 5px 8px 8px;
+  z-index: -1;
+}
+
+/* Persona 2: Cabello bob vista trasera */
+.hair-2-back {
+  width: 36px;
+  height: 18px;
+  background: linear-gradient(180deg, #4a3728 0%, #3d2d20 50%);
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  margin-bottom: -8px;
+  z-index: 3;
+}
+
+.hair-2-back::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: -3px;
+  width: 42px;
+  height: 28px;
+  background: linear-gradient(180deg, #4a3728 0%, #3d2d20 100%);
+  border-radius: 8px 8px 12px 12px;
+  z-index: 2;
+}
+
+/* ===== ROPA ===== */
+.outfit {
+  position: relative;
+  border-radius: 0 0 4px 4px;
+  margin-top: -2px;
+}
+
+/* Persona 1: Camiseta oscura con diseño + chaqueta azul claro */
+.outfit-1 {
+  width: 36px;
+  height: 42px;
+  background: #1a1a2e;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Diseño de la camiseta */
+.outfit-1::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: #8b3a3a;
+  border-radius: 2px;
+}
+
+/* Chaqueta azul claro */
+.jacket-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    #87CEEB 0%, 
+    #87CEEB 25%, 
+    transparent 25%, 
+    transparent 75%, 
+    #87CEEB 75%, 
+    #87CEEB 100%
+  );
+  border-radius: 0 0 4px 4px;
+}
+
+/* Persona 2: Camiseta negra con diseño rosa + cardigan beige */
+.outfit-2 {
+  width: 36px;
+  height: 42px;
+  background: #1a1a1a;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Diseño rosa de la camiseta */
+.outfit-2::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background: #c4577a;
+  border-radius: 2px;
+}
+
+/* Cardigan beige/crema */
+.cardigan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    #f5f5dc 0%, 
+    #f5f5dc 28%, 
+    transparent 28%, 
+    transparent 72%, 
+    #f5f5dc 72%, 
+    #f5f5dc 100%
+  );
+  border-radius: 0 0 4px 4px;
+}
+
+/* ===== ROPA VISTA TRASERA ===== */
+
+/* Persona 1: Chaqueta azul claro vista trasera */
+.outfit-1-back {
+  width: 38px;
+  height: 44px;
+  background: linear-gradient(180deg, #87CEEB 0%, #6bb3d9 100%);
+  border-radius: 4px 4px 6px 6px;
+  position: relative;
+  margin-top: -2px;
+}
+
+/* Línea central de la espalda de la chaqueta */
+.outfit-1-back::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 30px;
+  background: rgba(0,0,0,0.15);
+}
+
+/* Cuello de la chaqueta */
+.outfit-1-back::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 6px;
+  background: #6bb3d9;
+  border-radius: 2px;
+}
+
+/* Persona 2: Cardigan beige vista trasera */
+.outfit-2-back {
+  width: 38px;
+  height: 44px;
+  background: linear-gradient(180deg, #f5f5dc 0%, #e8e4c9 100%);
+  border-radius: 4px 4px 6px 6px;
+  position: relative;
+  margin-top: -2px;
+}
+
+/* Línea central del cardigan */
+.outfit-2-back::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 30px;
+  background: rgba(0,0,0,0.1);
+}
+
+/* Cuello/escote del cardigan */
+.outfit-2-back::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 5px;
+  background: #1a1a1a;
+  border-radius: 2px;
+}
+
+/* Legacy styles for backwards compatibility */
+.girl-hair {
+  background: #a0522d;
+  width: 34px;
+  height: 18px;
+}
+
+.boy-hair {
+  background: #4a3728;
+  width: 34px;
+  height: 14px;
+}
+
+.girl-outfit, .boy-outfit {
+  background: linear-gradient(135deg, #1e3a5f 0%, #152238 100%);
+  width: 26px;
+  height: 40px;
+}
+
+/* ===== CORAZÓN SECRETO ===== */
+.secret-heart {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 26;
+  opacity: 0.4;
+  filter: brightness(0.8);
+  transition: all 0.3s ease;
+}
+
+.secret-heart:hover {
+  opacity: 1 !important;
+  filter: brightness(1.2);
+  transform: translateX(-50%) scale(1.5);
+}
+
+/* ===== ÁRBOLES ===== */
+.trees {
+  position: absolute;
+  bottom: 15%;
+  left: 0;
+  width: 100%;
+  height: 15%;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.tree {
+  position: absolute;
+  bottom: 0;
+}
+
+.tree::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 60px solid #0d3320;
+}
+
+.tree::after {
+  content: '';
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 45px solid #0d4428;
+}
+
+.tree-1 {
+  left: 5%;
+}
+
+.tree-2 {
+  left: 15%;
+  transform: scale(0.8);
+}
+
+.tree-3 {
+  right: 10%;
+  transform: scale(1.1);
+}
+
+.tree-4 {
+  right: 20%;
+  transform: scale(0.7);
+}
+
+/* ===== CIUDAD LEJANA ===== */
+.distant-city {
+  position: absolute;
+  bottom: 20%;
+  left: 0;
+  width: 100%;
+  height: 20%;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.city-light {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #ffd93d;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #ffd93d, 0 0 10px #ffd93d;
+}
+
+/* ===== HINT ===== */
+.hint {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* ===== CARTA DE AMOR ===== */
+.letter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  backdrop-filter: blur(5px);
+}
+
+.letter-container {
+  position: relative;
+  padding: 20px;
+}
+
+.envelope {
+  position: relative;
+  width: 90vw;
+  max-width: 500px;
+  background: linear-gradient(145deg, #f5e6d3, #e8d5c4);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.envelope-flap {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(145deg, #e8d5c4, #d4c4b0);
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  transform-origin: bottom center;
+  z-index: 1;
+}
+
+.letter {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2;
+}
+
+.letter-content {
+  font-family: 'Georgia', serif;
+  color: #333;
+  line-height: 1.8;
+}
+
+.letter-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #ffcce0;
+}
+
+.letter-header h2 {
+  color: #e75480;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.heart-decoration {
+  font-size: 1.5rem;
+}
+
+.letter-body p {
+  margin-bottom: 15px;
+  text-align: justify;
+  font-size: 1rem;
+}
+
+.letter-closing {
+  text-align: center;
+  font-style: italic;
+  color: #e75480;
+  font-size: 1.1rem !important;
+  margin-top: 20px !important;
+}
+
+.letter-signature {
+  text-align: right;
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.letter-signature p {
+  margin: 5px 0;
+}
+
+.signature {
+  font-family: 'Brush Script MT', cursive;
+  font-size: 1.8rem;
+  color: #e75480;
+}
+
+.letter-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.5rem;
+}
+
+.close-button {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e75480;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 2rem;
+  pointer-events: none;
+}
+
+.sparkle-1 {
+  top: -30px;
+  left: 20px;
+}
+
+.sparkle-2 {
+  bottom: -20px;
+  right: 30px;
+}
+
+.sparkle-3 {
+  top: 50%;
+  right: -30px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1.5rem;
+  }
+  
+  .viewpoint {
+    width: 95%;
+  }
+  
+  .letter {
+    padding: 20px;
+  }
+  
+  .letter-body p {
+    font-size: 0.9rem;
+  }
+  
+  .letter-header h2 {
+    font-size: 1.4rem;
+  }
+  
+  .couple-container {
+    gap: 10px;
+  }
+  
+  .moon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+  
+  .letter-content {
+    font-size: 0.85rem;
+  }
+  
+  .hint {
+    font-size: 12px;
+  }
+}
+
