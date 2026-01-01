@@ -93,19 +93,19 @@ const Fireworks = () => {
       }, 3000)
     }
 
-    // Crear muchos fuegos iniciales
-    for (let i = 0; i < 10; i++) {
-      setTimeout(() => createFirework(), i * 150)
+    // Crear fuegos iniciales
+    for (let i = 0; i < 4; i++) {
+      setTimeout(() => createFirework(), i * 400)
     }
 
-    // Crear fuegos muy frecuentemente
+    // Crear fuegos con frecuencia moderada
     const interval = setInterval(() => {
-      // Crear 3-5 fuegos a la vez
-      const count = Math.floor(Math.random() * 3) + 3
+      // Crear 1-2 fuegos a la vez
+      const count = Math.floor(Math.random() * 2) + 1
       for (let i = 0; i < count; i++) {
-        setTimeout(() => createFirework(), i * 80)
+        setTimeout(() => createFirework(), i * 200)
       }
-    }, 200)
+    }, 600)
 
     return () => clearInterval(interval)
   }, [])
