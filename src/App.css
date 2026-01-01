@@ -127,6 +127,40 @@ html, body, #root {
   left: 50%;
 }
 
+/* Partículas con rastro/cola */
+.firework-particle-trail {
+  position: absolute;
+  width: 4px;
+  height: 20px;
+  border-radius: 2px;
+  top: 50%;
+  left: 50%;
+  transform-origin: center top;
+}
+
+/* Sparkles pequeños */
+.firework-sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+}
+
+/* Anillo de expansión */
+.firework-ring {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 2px solid;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 .firework-center {
   position: absolute;
   width: 16px;
