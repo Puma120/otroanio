@@ -1,27 +1,34 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 
+// Detectar si es móvil
+const isMobile = () => window.innerWidth <= 768
+
 const Firework = ({ x, y, color, delay }) => {
-  // Más partículas para un efecto más denso
-  const particles = Array.from({ length: 20 }, (_, i) => {
-    const angle = (i / 20) * Math.PI * 2
-    const distance = 100 + Math.random() * 80
+  const mobile = isMobile()
+  
+  // Menos partículas en móvil para mejor rendimiento
+  const particleCount = mobile ? 10 : 20
+  const sparkleCount = mobile ? 6 : 12
+  
+  const particles = Array.from({ length: particleCount }, (_, i) => {
+    const angle = (i / particleCount) * Math.PI * 2
+    const distance = mobile ? (60 + Math.random() * 40) : (100 + Math.random() * 80)
     return {
       id: i,
       endX: Math.cos(angle) * distance,
-      endY: Math.sin(angle) * distance + 30, // Gravedad
+      endY: Math.sin(angle) * distance + (mobile ? 15 : 30),
       rotation: Math.random() * 360
     }
   })
 
-  // Partículas secundarias (sparkles)
-  const sparkles = Array.from({ length: 12 }, (_, i) => {
+  const sparkles = Array.from({ length: sparkleCount }, (_, i) => {
     const angle = Math.random() * Math.PI * 2
-    const distance = 40 + Math.random() * 60
+    const distance = mobile ? (25 + Math.random() * 35) : (40 + Math.random() * 60)
     return {
       id: i,
       endX: Math.cos(angle) * distance,
-      endY: Math.sin(angle) * distance + 20
+      endY: Math.sin(angle) * distance + (mobile ? 10 : 20)
     }
   })
 
@@ -38,7 +45,7 @@ const Firework = ({ x, y, color, delay }) => {
         className="firework-trail"
         style={{ backgroundColor: color }}
         initial={{ height: 0, opacity: 1 }}
-        animate={{ height: 120, opacity: 0 }}
+        animate={{ height: mobile ? 80 : 120, opacity: 0 }}
         transition={{ duration: 0.6, delay }}
       />
       
@@ -59,7 +66,7 @@ const Firework = ({ x, y, color, delay }) => {
             rotate: particle.rotation + 180
           }}
           transition={{ 
-            duration: 1.8, 
+            duration: mobile ? 1.2 : 1.8, 
             delay: delay + 0.5,
             ease: "easeOut",
             opacity: { times: [0, 0.1, 0.6, 1] }
@@ -74,17 +81,17 @@ const Firework = ({ x, y, color, delay }) => {
           className="firework-sparkle"
           style={{ 
             backgroundColor: 'white',
-            boxShadow: `0 0 4px white, 0 0 8px ${color}`
+            boxShadow: mobile ? `0 0 3px white` : `0 0 4px white, 0 0 8px ${color}`
           }}
           initial={{ x: 0, y: 0, opacity: 0, scale: 0 }}
           animate={{ 
             x: sparkle.endX, 
             y: sparkle.endY, 
             opacity: [0, 1, 0],
-            scale: [0, 1.5, 0]
+            scale: [0, mobile ? 1 : 1.5, 0]
           }}
           transition={{ 
-            duration: 1.2, 
+            duration: mobile ? 0.8 : 1.2, 
             delay: delay + 0.6,
             ease: "easeOut"
           }}
@@ -94,20 +101,27 @@ const Firework = ({ x, y, color, delay }) => {
       {/* Centro brillante de la explosión */}
       <motion.div
         className="firework-center"
-        style={{ backgroundColor: 'white', boxShadow: `0 0 30px ${color}, 0 0 60px ${color}, 0 0 90px ${color}` }}
+        style={{ 
+          backgroundColor: 'white', 
+          boxShadow: mobile 
+            ? `0 0 15px ${color}, 0 0 30px ${color}` 
+            : `0 0 30px ${color}, 0 0 60px ${color}, 0 0 90px ${color}` 
+        }}
         initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: [0, 3, 0], opacity: [0, 1, 0] }}
+        animate={{ scale: [0, mobile ? 2 : 3, 0], opacity: [0, 1, 0] }}
         transition={{ duration: 0.6, delay: delay + 0.5 }}
       />
 
-      {/* Anillo de expansión */}
-      <motion.div
-        className="firework-ring"
-        style={{ borderColor: color }}
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: [0, 4], opacity: [0.8, 0] }}
-        transition={{ duration: 1, delay: delay + 0.5, ease: "easeOut" }}
-      />
+      {/* Anillo de expansión - solo en desktop */}
+      {!mobile && (
+        <motion.div
+          className="firework-ring"
+          style={{ borderColor: color }}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: [0, 4], opacity: [0.8, 0] }}
+          transition={{ duration: 1, delay: delay + 0.5, ease: "easeOut" }}
+        />
+      )}
     </motion.div>
   )
 }
@@ -127,6 +141,8 @@ const Fireworks = () => {
   ]
 
   useEffect(() => {
+    const mobile = isMobile()
+    
     const createFirework = () => {
       const newFirework = {
         id: Date.now() + Math.random(),
@@ -138,21 +154,22 @@ const Fireworks = () => {
       
       setFireworks(prev => [...prev, newFirework])
       
-      // Limpiar fuegos viejos
+      // Limpiar fuegos viejos (más rápido en móvil)
       setTimeout(() => {
         setFireworks(prev => prev.filter(f => f.id !== newFirework.id))
-      }, 3000)
+      }, mobile ? 2000 : 3000)
     }
 
-    // Crear fuegos iniciales
-    for (let i = 0; i < 3; i++) {
+    // Menos fuegos iniciales en móvil
+    const initialCount = mobile ? 2 : 3
+    for (let i = 0; i < initialCount; i++) {
       setTimeout(() => createFirework(), i * 800)
     }
 
-    // Crear 1 fuego por segundo
+    // Menos frecuente en móvil (1 cada 1.5s en móvil, 1 cada 1s en desktop)
     const interval = setInterval(() => {
       createFirework()
-    }, 1000)
+    }, mobile ? 1500 : 1000)
 
     return () => clearInterval(interval)
   }, [])
